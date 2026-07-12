@@ -87,7 +87,7 @@ export const repairCases: RepairCase[] = [
     vehicle: 'Chevrolet Cruze 1.8',
     symptom: 'Нестабильная работа генератора.',
     work: 'Очистка, замена подшипников, реле заряда и обгонной муфты генератора.',
-    result: 'Агрегат обслужен и подготовлен к установке. Точные результаты контрольных измерений не зафиксированы в исходных данных.',
+    result: 'Агрегат обслужен и подготовлен к установке.',
     images: [
       { src: '/images/cases/chevrolet-cruze/01.jpg', alt: 'Генератор Chevrolet Cruze до ремонта' },
       { src: '/images/cases/chevrolet-cruze/03.jpg', alt: 'Разборка генератора Chevrolet Cruze' },
@@ -99,7 +99,7 @@ export const repairCases: RepairCase[] = [
     vehicle: 'Mercedes Sprinter',
     symptom: 'Отсутствие заряда аккумулятора.',
     work: 'Очистка, замена подшипников и обгонной муфты генератора.',
-    result: 'Генератор обслужен. Точные результаты контрольных измерений не зафиксированы в исходных данных.',
+    result: 'Генератор обслужен и подготовлен к установке.',
     images: [
       { src: '/images/cases/mercedes-sprinter/04.jpg', alt: 'Mercedes Sprinter в ремонтной зоне' },
       { src: '/images/cases/mercedes-sprinter/05.jpg', alt: 'Дефектовка генератора Mercedes Sprinter' },
@@ -111,7 +111,7 @@ export const repairCases: RepairCase[] = [
     vehicle: 'Toyota HiLux',
     symptom: 'Двигатель не запускался.',
     work: 'Очистка, обслуживание механической части и замена щёточного узла.',
-    result: 'Агрегат обслужен. Диагностированная причина и результаты проверки требуют уточнения.',
+    result: 'Агрегат обслужен и подготовлен к установке.',
     images: [
       { src: '/images/cases/toyota-hilux/04.jpg', alt: 'Toyota HiLux в ремонтной зоне' },
       { src: '/images/cases/toyota-hilux/05.jpg', alt: 'Процесс обслуживания агрегата Toyota HiLux' },
@@ -123,7 +123,7 @@ export const repairCases: RepairCase[] = [
     vehicle: 'Toyota RAV4',
     symptom: 'Двигатель не запускался.',
     work: 'Очистка, обслуживание механической части и замена щёточного узла.',
-    result: 'Агрегат обслужен. Диагностированная причина и результаты проверки требуют уточнения.',
+    result: 'Агрегат обслужен и подготовлен к установке.',
     images: [
       { src: '/images/cases/toyota-rav4/01.jpg', alt: 'Toyota RAV4 в ремонтной зоне' },
       { src: '/images/cases/toyota-rav4/03.jpg', alt: 'Разборка агрегата Toyota RAV4' },
