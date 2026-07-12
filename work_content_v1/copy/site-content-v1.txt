@@ -14,10 +14,13 @@
 график Пн-Пт 9-18 Сб 10-15
 
 -- геолокация и маршрут;
-координаты въезда: 43.341111, 76.946029
-Google Maps: https://www.google.com/maps/dir/?api=1&destination=43.341111%2C76.946029
-Яндекс Карты: https://yandex.com/maps/?rtext=~43.341111%2C76.946029&rtt=auto
-2GIS: dgis://2gis.ru/routeSearch/rsType/car/to/76.946029,43.341111
+Парковка
+https://2gis.kz/almaty/geo/70030077161935154/76.946094,43.341558
+
+координаты въезда: 43.341558, 76.946094
+Google Maps: 
+Яндекс Карты: 
+2GIS: 
 
 
 -- WhatsApp-ссылка;

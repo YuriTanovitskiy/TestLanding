@@ -32,7 +32,7 @@
 - Заезд: с улицы Осипенко.
 - Понедельник–пятница: 09:00–18:00.
 - Суббота: 10:00–15:00.
-- Координаты въезда: `43.341111, 76.946029`.
+- Координаты въезда: `43.341558, 76.946094`.
 - Instagram: `https://www.instagram.com/autocraftkz?utm_source=qr&igsh=aDd4djhzY3F5eTdy`.
 
 ### Производные ссылки
@@ -41,9 +41,9 @@
 - Телефон 2: `tel:+77058194203`.
 - WhatsApp 1: `https://wa.me/77073648536`.
 - WhatsApp 2: `https://wa.me/77058194203`.
-- Google Maps: `https://www.google.com/maps/dir/?api=1&destination=43.341111%2C76.946029`.
-- Яндекс Карты: `https://yandex.com/maps/?rtext=~43.341111%2C76.946029&rtt=auto`.
-- 2GIS: `dgis://2gis.ru/routeSearch/rsType/car/to/76.946029,43.341111`.
+- Google Maps: `https://www.google.com/maps/dir/?api=1&destination=43.341558%2C76.946094`.
+- Яндекс Карты: `https://yandex.com/maps/?rtext=~43.341558%2C76.946094&rtt=auto`.
+- 2GIS: `https://2gis.kz/almaty/geo/70030077161935154/76.946094,43.341558`.
 
 ### Требует уточнения
 
@@ -318,4 +318,3 @@
 7. Финальная техническая редактура симптомов.
 8. Фотографии и описание въезда.
 9. Решение по аналитике посещений.
-
