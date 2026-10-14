@@ -23,6 +23,15 @@ export const phones: ContactPhone[] = [
   },
 ]
 
+export const workshopIntro = {
+  transport: 'Обслуживаем легковой и коммерческий транспорт, спецтехнику.',
+  services: [
+    { title: 'Диагностические работы', price: 'от 2 000 ₸' },
+    { title: 'Ремонт агрегатов', price: 'от 6 000 ₸' },
+    { title: 'Замена агрегатов на автомобилях', price: 'от 5 000 ₸' },
+  ],
+}
+
 export const symptomGroups: SymptomGroup[] = [
   {
     id: 'starter',
@@ -137,6 +146,7 @@ export const contactDetails = {
   entrance: 'Заезд с ул. Осипенко, ориентир: ул. П. Осипенко, 9/1',
   hours: ['Пн–Пт: 09:00–18:00', 'Сб: 10:00–15:00'],
   googleMapsUrl: 'https://www.google.com/maps/dir/?api=1&destination=43.341558%2C76.946094',
+  mapEmbedUrl: 'https://yandex.ru/map-widget/v1/?ll=76.946094%2C43.341558&z=16&pt=76.946094%2C43.341558%2Cpm2gnm&lang=ru_RU',
   yandexMapsUrl: 'https://yandex.com/maps/?rtext=~43.341558%2C76.946094&rtt=auto',
   twoGisUrl: 'https://2gis.kz/almaty/geo/70030077161935154/76.946094,43.341558',
   instagramUrl: 'https://www.instagram.com/autocraftkz?utm_source=qr&igsh=aDd4djhzY3F5eTdy',

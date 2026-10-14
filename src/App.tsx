@@ -1,17 +1,24 @@
 import './App.css'
+import { useLanguage, translateContent } from './i18n'
+import { LanguageSwitcher } from './components/LanguageSwitcher'
+import { RepairRequest } from './components/RepairRequest'
+import { ContactIcon } from './components/ContactIcon'
+import { LocationMap } from './components/LocationMap'
+import { trackContactClick } from './analytics'
 import {
-  contactDetails,
+  contactDetails as rawcontactDetails,
+  workshopIntro as rawworkshopIntro,
   phones,
-  qualityCriteria,
-  repairCases,
-  repairSteps,
-  servicePhotos,
-  serviceTiming,
-  symptomGroups,
+  qualityCriteria as rawqualityCriteria,
+  repairCases as rawrepairCases,
+  repairSteps as rawrepairSteps,
+  servicePhotos as rawservicePhotos,
+  serviceTiming as rawserviceTiming,
+  symptomGroups as rawsymptomGroups,
 } from './data/siteData'
 
 interface SectionHeadingProps {
-  eyebrow: string
+  eyebrow?: string
   title: string
   description?: string
 }
@@ -19,7 +26,7 @@ interface SectionHeadingProps {
 function SectionHeading({ eyebrow, title, description }: SectionHeadingProps) {
   return (
     <header className="section-heading">
-      <p className="eyebrow">{eyebrow}</p>
+      {eyebrow && <p className="eyebrow">{eyebrow}</p>}
       <h2>{title}</h2>
       {description && <p className="section-description">{description}</p>}
     </header>
@@ -27,18 +34,15 @@ function SectionHeading({ eyebrow, title, description }: SectionHeadingProps) {
 }
 
 function Header() {
+  const { t } = useLanguage()
   return (
     <header className="site-header">
       <div className="container header-inner">
-        <a className="brand" href="#top" aria-label="Auto CRAFT KZ — на главную">
-          <img src="/logo.png" alt="" />
-          <span className="sr-only">Auto CRAFT KZ</span>
-        </a>
-        <nav aria-label="Основная навигация">
-          <a href="#services">Ремонт</a>
-          <a href="#cases">Случаи</a>
-          <a href="#contacts">Контакты</a>
+        <nav aria-label={t("Основная навигация")}>
+          <a href="#prices">{t("Услуги и стоимость")}</a>
+          <a href="#repair-request">{t("Обсудить ремонт")}</a>
         </nav>
+        <LanguageSwitcher />
         <a className="header-phone" href={phones[0].href}>{phones[0].display}</a>
       </div>
     </header>
@@ -46,42 +50,52 @@ function Header() {
 }
 
 function Hero() {
+  const { t } = useLanguage()
+  const contactDetails = translateContent(rawcontactDetails, t)
+  const workshopIntro = translateContent(rawworkshopIntro, t)
   return (
     <section className="hero" id="top">
+      <div className="container hero-brand-row">
+        <a className="brand" href="#top" aria-label={t("Auto CRAFT KZ — на главную")}>
+          <img src="/logo.png" alt="Auto CRAFT KZ" width="176" height="176" />
+        </a>
+        <h1><span className="brand-wordmark"><span className="wordmark-auto">Auto</span><span className="wordmark-craft">CRAFT</span><span className="wordmark-kz">KZ</span></span>{t("Мастерская по ремонту стартеров и генераторов в Алматы")}</h1>
+      </div>
       <div className="container hero-grid">
         <div className="hero-copy">
-          <p className="eyebrow">Алматы · легковой и коммерческий транспорт</p>
-          <h1>Ремонт стартеров и генераторов</h1>
-          <p className="hero-lead">
-            Диагностика, разборка, дефектовка, ремонт и проверка агрегата на стенде.
-            Запчасти для выполнения работ находятся в мастерской.
-          </p>
-          <div className="action-row">
-            <a className="button button-primary" href={phones[0].whatsappUrl}>Написать в WhatsApp</a>
-            <a className="button button-secondary" href={phones[0].href}>Позвонить</a>
+          <div className="hero-hours" aria-label={t("График работы")}>
+            <strong>{t("График работы")}</strong>
+            {contactDetails.hours.map((hours) => <span key={hours}>{hours}</span>)}
           </div>
-          <dl className="hero-facts">
-            <div><dt>Адрес</dt><dd>{contactDetails.address}</dd></div>
-            <div><dt>График</dt><dd>Пн–Пт 09:00–18:00 · Сб 10:00–15:00</dd></div>
-          </dl>
+          <p className="hero-lead">{workshopIntro.transport}</p>
+          <div className="hero-services" id="prices">
+            <table className="service-prices">
+              <thead><tr><th scope="col">{t("Основные услуги")}</th><th scope="col"><span className="sr-only">{t("Цена")}</span></th></tr></thead>
+              <tbody>{workshopIntro.services.map((service) => (
+                <tr key={service.title}><th scope="row">{service.title}</th><td>{service.price}</td></tr>
+              ))}</tbody>
+            </table>
+            <p className="service-price-note">{t("Итоговая стоимость ремонта определяется после диагностики.")}</p>
+          </div>
+          <div className="action-row hero-contact-actions">
+            <a className="button button-secondary" href={phones[0].href}><ContactIcon kind="phone" />{t("Позвонить")}</a>
+            <a className="button button-primary" href={phones[0].whatsappUrl}><ContactIcon kind="whatsapp" />WhatsApp</a>
+          </div>
+          <a className="text-link light-link" href="#repair-request">{t("Описать неисправность →")}</a>
         </div>
-        <figure className="hero-visual">
-          <img src="/images/team/yuri-workshop-v1.jpg" alt="Сотрудник Auto CRAFT KZ у стенда проверки генератора" />
-          <figcaption>
-            <span>Реальная мастерская</span>
-            Проверка агрегатов и компонентов
-          </figcaption>
-        </figure>
+        <LocationMap />
       </div>
     </section>
   )
 }
 
 function Symptoms() {
+  const { t } = useLanguage()
+  const symptomGroups = translateContent(rawsymptomGroups, t)
   return (
     <section className="section" id="symptoms">
       <div className="container">
-        <SectionHeading eyebrow="Наблюдения водителя" title="Что говорит о неисправности" description="Одинаковые симптомы могут иметь разные причины. Точную причину определяет диагностика." />
+        <SectionHeading eyebrow={t("Наблюдения водителя")} title={t("Что говорит о неисправности")} description={t("Одинаковые симптомы могут иметь разные причины. Точную причину определяет диагностика.")} />
         <div className="symptom-grid">
           {symptomGroups.map((group) => (
             <article className="symptom-card" key={group.id}>
@@ -96,14 +110,15 @@ function Symptoms() {
 }
 
 function ComponentPurpose() {
+  const { t } = useLanguage()
   return (
     <section className="section section-dark" id="purpose">
       <div className="container">
-        <SectionHeading eyebrow="Система запуска и питания" title="Два агрегата, от которых зависит поездка" />
+        <SectionHeading eyebrow={t("Система запуска и питания")} title={t("Два агрегата, от которых зависит поездка")} />
         <div className="purpose-grid">
-          <article><span className="unit-number">01</span><h3>Стартер запускает двигатель</h3><p>Он превращает электрическую энергию аккумулятора во вращение, необходимое для первого запуска двигателя.</p></article>
-          <article><span className="unit-number">02</span><h3>Генератор поддерживает работу</h3><p>После запуска он питает электрооборудование автомобиля и восполняет заряд аккумулятора.</p></article>
-          <aside><p>Неисправность аккумулятора или проводки может выглядеть как поломка агрегата. Поэтому ремонт начинается с проверки, а не со случайной замены деталей.</p></aside>
+          <article><span className="unit-number">01</span><h3>{t("Стартер запускает двигатель")}</h3><p>{t("Он превращает электрическую энергию аккумулятора во вращение, необходимое для первого запуска двигателя.")}</p></article>
+          <article><span className="unit-number">02</span><h3>{t("Генератор поддерживает работу")}</h3><p>{t("После запуска он питает электрооборудование автомобиля и восполняет заряд аккумулятора.")}</p></article>
+          <aside><p>{t("Неисправность аккумулятора или проводки может выглядеть как поломка агрегата. Поэтому ремонт начинается с проверки, а не со случайной замены деталей.")}</p></aside>
         </div>
       </div>
     </section>
@@ -111,10 +126,12 @@ function ComponentPurpose() {
 }
 
 function RepairScope() {
+  const { t } = useLanguage()
+  const repairSteps = translateContent(rawrepairSteps, t)
   return (
     <section className="section" id="services">
       <div className="container">
-        <SectionHeading eyebrow="В мастерской" title="Что происходит с агрегатом" description="Состав работ определяется состоянием конкретного агрегата после проверки." />
+        <SectionHeading eyebrow={t("В мастерской")} title={t("Что происходит с агрегатом")} description={t("Состав работ определяется состоянием конкретного агрегата после проверки.")} />
         <ol className="steps-grid">
           {repairSteps.map((step, index) => (
             <li key={step.id}><span>{String(index + 1).padStart(2, '0')}</span><h3>{step.title}</h3><p>{step.description}</p></li>
@@ -126,18 +143,19 @@ function RepairScope() {
 }
 
 function VehicleContexts() {
+  const { t } = useLanguage()
   return (
     <section className="section vehicle-section">
       <div className="container">
-        <SectionHeading eyebrow="Условия эксплуатации" title="Легковой автомобиль или рабочая машина" />
+        <SectionHeading eyebrow={t("Условия эксплуатации")} title={t("Легковой автомобиль или рабочая машина")} />
         <div className="vehicle-grid">
           <article className="vehicle-card passenger">
-            <div><p className="card-kicker">Легковой транспорт</p><h3>Надёжный ежедневный запуск</h3><p>Повторяющиеся проблемы с запуском или зарядом лучше проверять до того, как автомобиль перестанет заводиться.</p></div>
-            <img src="/images/workshop/vehicle-service-bay-v1.jpg" alt="Легковой автомобиль в ремонтной зоне Auto CRAFT KZ" />
+            <div><p className="card-kicker">{t("Легковой транспорт")}</p><h3>{t("Надёжный ежедневный запуск")}</h3><p>{t("Повторяющиеся проблемы с запуском или зарядом лучше проверять до того, как автомобиль перестанет заводиться.")}</p></div>
+            <img src="/images/workshop/vehicle-service-bay-v1.jpg" alt={t("Легковой автомобиль в ремонтной зоне Auto CRAFT KZ")} />
           </article>
           <article className="vehicle-card commercial">
-            <div><p className="card-kicker">Коммерческий транспорт</p><h3>Простой — часть стоимости ремонта</h3><p>Интенсивные циклы запуска и повышенная электрическая нагрузка делают точную диагностику особенно важной для рабочей машины.</p></div>
-            <img src="/images/cases/mercedes-sprinter/04.jpg" alt="Mercedes Sprinter в ремонтной зоне Auto CRAFT KZ" />
+            <div><p className="card-kicker">{t("Коммерческий транспорт")}</p><h3>{t("Простой — часть стоимости ремонта")}</h3><p>{t("Интенсивные циклы запуска и повышенная электрическая нагрузка делают точную диагностику особенно важной для рабочей машины.")}</p></div>
+            <img src="/images/cases/mercedes-sprinter/04.jpg" alt={t("Mercedes Sprinter в ремонтной зоне Auto CRAFT KZ")} />
           </article>
         </div>
       </div>
@@ -146,60 +164,68 @@ function VehicleContexts() {
 }
 
 function Quality() {
+  const { t } = useLanguage()
+  const qualityCriteria = translateContent(rawqualityCriteria, t)
   return (
     <section className="section quality-section">
       <div className="container quality-grid">
         <div>
-          <SectionHeading eyebrow="Проверяемые критерии" title="Как оценить выполненную работу" />
+          <SectionHeading eyebrow={t("Проверяемые критерии")} title={t("Как оценить выполненную работу")} />
           <div className="criteria-list">
             {qualityCriteria.map((item, index) => <article key={item.title}><span>{index + 1}</span><div><h3>{item.title}</h3><p>{item.description}</p></div></article>)}
           </div>
         </div>
         <figure className="quality-photo">
-          <img src="/images/equipment/alternator-test-bench-v1.jpg" alt="Проверка генератора на стенде под нагрузкой" />
-          <figcaption>Проверка генератора на стенде</figcaption>
+          <img src="/images/equipment/alternator-test-bench-v1.jpg" alt={t("Проверка генератора на стенде под нагрузкой")} />
+          <figcaption>{t("Проверка генератора на стенде")}</figcaption>
         </figure>
       </div>
       <div className="container economics">
-        <p className="eyebrow">Стоимость ремонта — не только цена детали</p>
-        <p>Повторное снятие агрегата, случайная замена компонентов и простой автомобиля увеличивают общие затраты. Диагностика и контроль после сборки помогают избежать повторения той же работы.</p>
+        <p className="eyebrow">{t("Стоимость ремонта — не только цена детали")}</p>
+        <p>{t("Повторное снятие агрегата, случайная замена компонентов и простой автомобиля увеличивают общие затраты. Диагностика и контроль после сборки помогают избежать повторения той же работы.")}</p>
       </div>
     </section>
   )
 }
 
 function ServicePhotoStrip() {
+  const { t } = useLanguage()
+  const servicePhotos = translateContent(rawservicePhotos, t)
   return (
-    <div className="photo-strip" aria-label="Фотографии процессов в сервисе">
+    <div className="photo-strip" aria-label={t("Фотографии процессов в сервисе")}>
       {servicePhotos.map((photo) => <figure key={photo.src}><img src={photo.src} alt={photo.alt} loading="lazy" /><figcaption>{photo.caption}</figcaption></figure>)}
     </div>
   )
 }
 
 function ServiceTiming() {
+  const { t } = useLanguage()
+  const serviceTiming = translateContent(rawserviceTiming, t)
   return (
     <section className="section section-dark">
       <div className="container">
-        <SectionHeading eyebrow="Проверка по состоянию" title="Нужно ли проверять агрегат сейчас?" description="У стартера и генератора нет одного универсального интервала для всех автомобилей. Ориентир — симптомы и условия эксплуатации." />
+        <SectionHeading eyebrow={t("Проверка по состоянию")} title={t("Нужно ли проверять агрегат сейчас?")} description={t("У стартера и генератора нет одного универсального интервала для всех автомобилей. Ориентир — симптомы и условия эксплуатации.")} />
         <div className="timing-grid">{serviceTiming.map((item) => <article key={item.title}><h3>{item.title}</h3><p>{item.description}</p></article>)}</div>
-        <a className="text-link light-link" href={phones[0].whatsappUrl}>Описать симптомы мастеру в WhatsApp →</a>
+        <a className="text-link light-link" href={phones[0].whatsappUrl}>{t("Описать симптомы мастеру в WhatsApp →")}</a>
       </div>
     </section>
   )
 }
 
 function RepairCases() {
+  const { t } = useLanguage()
+  const repairCases = translateContent(rawrepairCases, t)
   return (
     <section className="section" id="cases">
       <div className="container">
-        <SectionHeading eyebrow="Реальные работы" title="С чем приезжают и что делаем" description="В карточках сохранены только сведения, зафиксированные в исходных описаниях работ." />
+        <SectionHeading eyebrow={t("Реальные работы")} title={t("С чем приезжают и что делаем")} description={t("Примеры ремонта из нашей мастерской: симптомы, выполненные работы и результат.")} />
         <div className="cases-grid">
           {repairCases.map((repairCase) => (
             <article className="case-card" key={repairCase.id}>
               <div className="case-images">{repairCase.images.map((image) => <img key={image.src} src={image.src} alt={image.alt} loading="lazy" />)}</div>
               <div className="case-body">
                 <h3>{repairCase.vehicle}</h3>
-                <dl><div><dt>Обращение</dt><dd>{repairCase.symptom}</dd></div><div><dt>Работа</dt><dd>{repairCase.work}</dd></div><div><dt>Результат</dt><dd>{repairCase.result}</dd></div></dl>
+                <dl><div><dt>{t("Обращение")}</dt><dd>{repairCase.symptom}</dd></div><div><dt>{t("Работа")}</dt><dd>{repairCase.work}</dd></div><div><dt>{t("Результат")}</dt><dd>{repairCase.result}</dd></div></dl>
               </div>
             </article>
           ))}
@@ -210,67 +236,47 @@ function RepairCases() {
 }
 
 function ContactProcess() {
+  const { t } = useLanguage()
   const steps = ['Опишите симптомы по телефону или в WhatsApp', 'Автомобиль или снятый агрегат поступает на диагностику', 'После проверки согласовываются работы и детали', 'Агрегат ремонтируется и проходит контрольную проверку']
   return (
     <section className="section process-section">
       <div className="container">
-        <SectionHeading eyebrow="От обращения до проверки" title="Понятная последовательность" />
-        <ol className="contact-process">{steps.map((step, index) => <li key={step}><span>{index + 1}</span><p>{step}</p></li>)}</ol>
-      </div>
-    </section>
-  )
-}
-
-function Contacts() {
-  return (
-    <section className="section contacts-section" id="contacts">
-      <div className="container contacts-grid">
-        <div>
-          <p className="eyebrow">Связаться и приехать</p>
-          <h2>{contactDetails.address}</h2>
-          <p className="contacts-lead">{contactDetails.entrance}</p>
-          <div className="phone-list">{phones.map((phone) => <div key={phone.href}><span>{phone.label}</span><a href={phone.href}>{phone.display}</a></div>)}</div>
-          <div className="hours">{contactDetails.hours.map((item) => <span key={item}>{item}</span>)}</div>
-          <div className="map-links">
-            <a href={contactDetails.googleMapsUrl} target="_blank" rel="noreferrer">Google Maps</a>
-            <a href={contactDetails.yandexMapsUrl} target="_blank" rel="noreferrer">Яндекс Карты</a>
-            <a href={contactDetails.twoGisUrl}>2GIS</a>
-          </div>
-        </div>
-        <div className="contact-panel">
-          <p>Для первого сообщения укажите марку и модель автомобиля и опишите наблюдаемые симптомы.</p>
-          <a className="button button-primary" href={phones[0].whatsappUrl}>Написать в WhatsApp</a>
-          <a className="instagram-link" href={contactDetails.instagramUrl} target="_blank" rel="noreferrer">Instagram Auto CRAFT KZ →</a>
-        </div>
+        <SectionHeading title={t("Как проходит ремонт")} />
+        <ol className="contact-process">{steps.map((step, index) => <li key={step}><span>{index + 1}</span><p>{t(step)}</p></li>)}</ol>
       </div>
     </section>
   )
 }
 
 function MobileContactBar() {
-  return <aside className="mobile-contact-bar" aria-label="Быстрая связь"><a href={phones[0].href}>Позвонить</a><a href={phones[0].whatsappUrl}>WhatsApp</a></aside>
+  const { t } = useLanguage()
+  return <aside className="mobile-contact-bar" aria-label={t("Быстрая связь")}><a href={phones[0].href}><ContactIcon kind="phone" />{t("Позвонить")}</a><a href={phones[0].whatsappUrl}><ContactIcon kind="whatsapp" />WhatsApp</a></aside>
 }
 
 function App() {
+  const { t } = useLanguage()
   return (
-    <>
+    <div onClick={trackContactClick}>
       <Header />
       <main>
         <Hero />
+
+
+        <RepairRequest />
+        <ContactProcess />
+        <RepairCases />
         <Symptoms />
-        <ComponentPurpose />
         <RepairScope />
         <VehicleContexts />
         <Quality />
         <ServicePhotoStrip />
         <ServiceTiming />
-        <RepairCases />
-        <ContactProcess />
-        <Contacts />
+        <ComponentPurpose />
+
       </main>
-      <footer className="site-footer"><div className="container"><span>Auto CRAFT KZ</span><span>Ремонт стартеров и генераторов · Алматы</span></div></footer>
+      <footer className="site-footer"><div className="container"><a href="#top">{t("Наверх ↑")}</a><a href="#top">{t("Карта и контакты")}</a></div></footer>
       <MobileContactBar />
-    </>
+    </div>
   )
 }
 
