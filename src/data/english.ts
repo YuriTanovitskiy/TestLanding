@@ -1,4 +1,10 @@
 export const english: Record<string, string> = {
+  'Сезон': 'Season',
+  'Секретная скидка': 'Secret discount',
+  'Секретный код': 'Secret code',
+  'Получите окончательное предложение по цене ремонта от менеджера. Затем назовите секретный код «67» и получите скидку 5% от уже согласованной цены.': 'Get the final repair quote from the manager. Then mention the secret code “67” and get 5% off the price you have already agreed.',
+  'Скидка действует на всю сумму ремонта, включая детали.': 'The discount applies to the full repair price, including parts.',
+  'С 15 октября 2026 по 15 апреля 2027 включительно.': 'Valid from 15 October 2026 through 15 April 2027, inclusive.',
   'Увеличить фото': 'Enlarge photo',
   'Фотографии ремонта': 'Repair photos',
   'Закрыть фото': 'Close photo',

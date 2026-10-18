@@ -6,6 +6,7 @@ import { ContactIcon } from './components/ContactIcon'
 import { LocationMap } from './components/LocationMap'
 import { RepairVideo } from './components/RepairVideo'
 import { CaseGallery } from './components/CaseGallery'
+import { SeasonOffer } from './components/SeasonOffer'
 import { trackContactClick } from './analytics'
 import {
   contactDetails as rawcontactDetails,
@@ -273,6 +274,7 @@ function App() {
         <ServicePhotoStrip />
         <ServiceTiming />
         <ComponentPurpose />
+        <SeasonOffer />
 
       </main>
       <footer className="site-footer"><div className="container"><a href="#top">{t("Наверх ↑")}</a><a href="#top">{t("Карта и контакты")}</a></div></footer>

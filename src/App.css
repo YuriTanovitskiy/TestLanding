@@ -219,6 +219,25 @@ section[id] { scroll-margin-top: 140px; }
 .contact-panel p { margin: 0 0 24px; font-size: 1.35rem; line-height: 1.45; }
 .contact-panel .button { width: 100%; }
 .instagram-link { display: block; margin-top: 20px; font-weight: 800; text-decoration: none; }
+.season-offer-section { padding: 32px 0; color: #f3f6f5; background: var(--green-950); }
+.season-offer { position: relative; overflow: hidden; border: 1px solid #43524e; border-radius: 12px; background: #111f25; }
+.season-offer-art { display: block; width: 100%; height: 210px; object-fit: cover; object-position: 77% center; }
+.season-offer-content { position: relative; z-index: 1; padding: 28px 24px; }
+.season-offer-season { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px 16px; margin: 0 0 16px; color: #c1cdd1; font-size: .85rem; }
+.season-offer-season > span { font-size: 1.5rem; letter-spacing: .04em; white-space: nowrap; }
+.season-offer-season strong { color: #ffe0a6; font-size: 1.2em; font-weight: 400; }
+.season-offer h2 { margin: 0; font: inherit; font-size: .85rem; line-height: 1.5; }
+.season-offer-terms { margin-top: 24px; color: #111; }
+.season-offer-lead { margin: 0; font-size: 1rem; line-height: 1.7; }
+.season-offer-details, .season-offer-dates { margin: 16px 0 0; font-size: .85rem; line-height: 1.6; }
+.season-offer-dates { padding-top: 16px; border-top: 1px solid #a6b1b2; }
+@media (min-width: 768px) {
+  .season-offer-section { padding-block: 56px; }
+  .season-offer-art { position: absolute; inset: 0; height: 100%; object-position: 65% center; }
+  .season-offer::after { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, #0c1922f5 0%, #0c1922e8 35%, #0c192280 60%, #0c192200 85%); }
+  .season-offer-content { max-width: 610px; padding: 40px; }
+  .season-offer-lead { max-width: 430px; }
+}
 .site-footer { padding: 26px 0 90px; color: #9baba0; background: var(--green-950); }
 .site-footer .container { display: flex; flex-direction: column; gap: 5px; }
 .site-footer span:first-child { color: white; font-weight: 800; }
