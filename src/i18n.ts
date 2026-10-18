@@ -1,6 +1,6 @@
 import { createContext, useContext } from 'react'
 
-export type Language = 'ru' | 'kk'
+export type Language = 'ru' | 'kk' | 'en'
 interface LanguageContextValue {
   language: Language
   setLanguage: (language: Language) => void

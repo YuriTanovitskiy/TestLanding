@@ -5,6 +5,7 @@ import { RepairRequest } from './components/RepairRequest'
 import { ContactIcon } from './components/ContactIcon'
 import { LocationMap } from './components/LocationMap'
 import { RepairVideo } from './components/RepairVideo'
+import { CaseGallery } from './components/CaseGallery'
 import { trackContactClick } from './analytics'
 import {
   contactDetails as rawcontactDetails,
@@ -193,9 +194,7 @@ function ServicePhotoStrip() {
   const { t } = useLanguage()
   const servicePhotos = translateContent(rawservicePhotos, t)
   return (
-    <div className="photo-strip" aria-label={t("Фотографии процессов в сервисе")}>
-      {servicePhotos.map((photo) => <figure key={photo.src}><img src={photo.src} alt={photo.alt} loading="lazy" /><figcaption>{photo.caption}</figcaption></figure>)}
-    </div>
+    <CaseGallery images={servicePhotos} title={t('Фотографии процессов в сервисе')} layout="workshop" />
   )
 }
 
@@ -224,7 +223,7 @@ function RepairCases() {
         <div className="cases-grid">
           {repairCases.map((repairCase) => (
             <article className="case-card" key={repairCase.id}>
-              <div className="case-images">{repairCase.images.map((image) => <img key={image.src} src={image.src} alt={image.alt} loading="lazy" />)}</div>
+              <CaseGallery images={repairCase.images} title={repairCase.vehicle} />
               <div className="case-body">
                 <h3>{repairCase.vehicle}</h3>
                 <dl><div><dt>{t("Обращение")}</dt><dd>{repairCase.symptom}</dd></div><div><dt>{t("Работа")}</dt><dd>{repairCase.work}</dd></div><div><dt>{t("Результат")}</dt><dd>{repairCase.result}</dd></div></dl>

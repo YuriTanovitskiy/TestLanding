@@ -19,14 +19,14 @@ export function LocationMap() {
       <div className="map-provider-choice" role="group" aria-label={t("Выберите сервис карты")}>
         {providers.map((provider) => (
           <button key={provider.id} type="button" aria-pressed={selected.id === provider.id} onClick={() => setSelected(provider)}>
-            {provider.label}
+            {t(provider.label)}
           </button>
         ))}
       </div>
       <iframe
         key={selected.id}
-        src={selected.embed ? selected.id === 'google' ? `${selected.embed}&hl=${language}` : selected.embed.replace('lang=ru_RU', language === 'kk' ? 'lang=kk_KZ' : 'lang=ru_RU') : undefined}
-        title={`${selected.label}: AutoCraft KZ — ${contactDetails.address}. ${contactDetails.entrance}`}
+        src={selected.embed ? selected.id === 'google' ? `${selected.embed}&hl=${language}` : selected.embed.replace('lang=ru_RU', { ru: 'lang=ru_RU', kk: 'lang=kk_KZ', en: 'lang=en_US' }[language]) : undefined}
+        title={`${t(selected.label)}: AutoCraft KZ — ${contactDetails.address}. ${contactDetails.entrance}`}
         width="600"
         height="480"
         loading="lazy"
@@ -35,7 +35,7 @@ export function LocationMap() {
       <figcaption>
         <strong>{contactDetails.address}</strong>
         <span>{contactDetails.entrance}</span>
-        <a href={selected.route} target="_blank" rel="noreferrer">{t('Открыть в')} {selected.label} →</a>
+        <a href={selected.route} target="_blank" rel="noreferrer">{t('Открыть в')} {t(selected.label)} →</a>
       </figcaption>
     </figure>
   )
