@@ -5,7 +5,7 @@ import { contactDetails as rawContactDetails } from '../data/siteData'
 const providers = [
   { id: 'google', label: 'Google Maps', embed: 'https://www.google.com/maps?q=43.341558,76.946094&z=16&output=embed', route: rawContactDetails.googleMapsUrl },
   { id: 'yandex', label: 'Яндекс', embed: rawContactDetails.mapEmbedUrl, route: rawContactDetails.yandexMapsUrl },
-  { id: '2gis', label: '2GIS', embed: '', route: rawContactDetails.twoGisUrl },
+  { id: '2gis', label: '2GIS', embed: '/2gis.html', route: rawContactDetails.twoGisUrl },
 ]
 
 
@@ -23,13 +23,7 @@ export function LocationMap() {
           </button>
         ))}
       </div>
-      {selected.id === '2gis' ? (
-        <div className="map-external-panel">
-          <strong>2GIS</strong>
-          <p>{t("Посмотрите расположение мастерской и выберите маршрут в 2GIS.")}</p>
-          <a className="button button-primary" href={selected.route} target="_blank" rel="noreferrer">{t("Открыть карту 2GIS ↗")}</a>
-        </div>
-      ) : <iframe
+      <iframe
         key={selected.id}
         src={selected.embed ? selected.id === 'google' ? `${selected.embed}&hl=${language}` : selected.embed.replace('lang=ru_RU', language === 'kk' ? 'lang=kk_KZ' : 'lang=ru_RU') : undefined}
         title={`${selected.label}: AutoCraft KZ — ${contactDetails.address}. ${contactDetails.entrance}`}
@@ -37,7 +31,7 @@ export function LocationMap() {
         height="480"
         loading="lazy"
         allowFullScreen
-      />}
+      />
       <figcaption>
         <strong>{contactDetails.address}</strong>
         <span>{contactDetails.entrance}</span>

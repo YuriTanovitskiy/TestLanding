@@ -1,11 +1,17 @@
 import { useLanguage } from '../i18n'
 
 export function LanguageSwitcher() {
-  const { language, setLanguage, t } = useLanguage()
+  const { language, setLanguage } = useLanguage()
+  const nextLanguage = language === 'ru' ? 'kk' : 'ru'
   return (
-    <div className="language-switcher" role="group" aria-label={t('Язык сайта')}>
-      <button type="button" lang="ru" aria-pressed={language === 'ru'} onClick={() => setLanguage('ru')}>Русский</button>
-      <button type="button" lang="kk" aria-pressed={language === 'kk'} onClick={() => setLanguage('kk')}>Қазақша</button>
-    </div>
+    <button
+      className="language-switcher"
+      type="button"
+      lang={nextLanguage}
+      aria-label={language === 'ru' ? 'Переключить язык на казахский' : 'Сайт тілін орысшаға ауыстыру'}
+      onClick={() => setLanguage(nextLanguage)}
+    >
+      {language === 'ru' ? 'ҚАЗ' : 'РУС'}
+    </button>
   )
 }
