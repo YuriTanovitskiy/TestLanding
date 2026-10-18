@@ -4,6 +4,7 @@ import { LanguageSwitcher } from './components/LanguageSwitcher'
 import { RepairRequest } from './components/RepairRequest'
 import { ContactIcon } from './components/ContactIcon'
 import { LocationMap } from './components/LocationMap'
+import { RepairVideo } from './components/RepairVideo'
 import { trackContactClick } from './analytics'
 import {
   contactDetails as rawcontactDetails,
@@ -219,6 +220,7 @@ function RepairCases() {
     <section className="section" id="cases">
       <div className="container">
         <SectionHeading eyebrow={t("Реальные работы")} title={t("С чем приезжают и что делаем")} description={t("Примеры ремонта из нашей мастерской: симптомы, выполненные работы и результат.")} />
+        <RepairVideo src="/videos/toyota-camry-70-alternator-repair.mp4" title={`Toyota Camry 70 — ${t('Ремонт генератора')}`} />
         <div className="cases-grid">
           {repairCases.map((repairCase) => (
             <article className="case-card" key={repairCase.id}>
