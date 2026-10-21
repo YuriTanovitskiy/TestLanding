@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import { availableBookingDates, bookingTimes, nextBookingDate, validBookingDate } from '../booking'
-import type { BookingRequest } from '../booking'
+import type { BookingDetails, BookingRequest } from '../booking'
 import { phones } from '../data/siteData'
 import { trackEvent } from '../analytics'
 
@@ -43,10 +43,8 @@ export function ServiceBooking() {
     event.preventDefault()
     if (busy || !ready || !time || availability.occupied.includes(time)) return
     const form = new FormData(event.currentTarget)
-    const booking: BookingRequest = {
+    const booking: BookingDetails = {
       date, time,
-      name: String(form.get('name') ?? '').trim(),
-      phone: String(form.get('phone') ?? '').trim(),
       vehicle: String(form.get('vehicle') ?? '').trim(),
       year: String(form.get('year') ?? '').trim(),
       vin: String(form.get('vin') ?? '').trim(),
@@ -55,7 +53,8 @@ export function ServiceBooking() {
     setBusy(true)
     setError('')
     try {
-      const response = await fetch('/api/bookings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(booking) })
+      const reservation: BookingRequest = { date, time }
+      const response = await fetch('/api/bookings', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(reservation) })
       const result = await response.json() as { id?: string; error?: string }
       if (!response.ok || !result.id) {
         if (response.status === 409) { setTime(''); setRefresh(value => value + 1) }
@@ -64,7 +63,6 @@ export function ServiceBooking() {
       const message = [
         'Здравствуйте! Я записался на сервис Auto CRAFT KZ через сайт.',
         `Дата: ${date.split('-').reverse().join('.')}, время: ${time}`,
-        `Имя: ${booking.name}`, `Телефон: ${booking.phone}`,
         `Автомобиль: ${booking.vehicle}${booking.year ? `, ${booking.year} г.` : ''}`,
         booking.vin && `Номер кузова / VIN: ${booking.vin}`,
         booking.description && `Неисправность: ${booking.description}`,
@@ -110,11 +108,7 @@ export function ServiceBooking() {
             <p className="request-note" aria-live="polite">{!validDate ? '' : availability.error || (!ready ? 'Загружаем свободное время…' : time ? `Выбрано время: ${time}` : availability.occupied.length === bookingTimes.length ? 'Все окна заняты. Выберите другой день.' : 'Выберите свободное время.')}</p>
             {availability.error && <button className="booking-retry" type="button" onClick={() => setRefresh(value => value + 1)}>Обновить окна</button>}
           </fieldset>
-          <fieldset disabled={busy}><legend>2. Ваши данные</legend>
-            <div className="request-fields">
-              <div><label htmlFor="booking-name">Как к вам обращаться *</label><input id="booking-name" name="name" autoComplete="name" required maxLength={100} pattern=".*\S.*" placeholder="Ваше имя" /></div>
-              <div><label htmlFor="booking-phone">Телефон *</label><input id="booking-phone" name="phone" type="tel" autoComplete="tel" required maxLength={25} pattern="[+0-9\s\(\)\-]{10,25}" placeholder="+7 (___) ___-__-__" /></div>
-            </div>
+          <fieldset disabled={busy}><legend>2. Ваш автомобиль</legend>
             <label htmlFor="booking-vehicle">Марка и модель автомобиля *</label><input id="booking-vehicle" name="vehicle" required maxLength={120} pattern=".*\S.*" placeholder="Например, Toyota Camry" />
             <div className="request-fields">
               <div><label htmlFor="booking-year">Год выпуска</label><input id="booking-year" name="year" type="number" min="1900" max={new Date().getFullYear() + 1} placeholder="Например, 2015" /></div>
@@ -124,7 +118,7 @@ export function ServiceBooking() {
           </fieldset>
           {error && <p className="booking-error" role="alert">{error}</p>}
           <button className="button button-primary" disabled={busy || !ready || !time} type="submit">{busy ? 'Сохраняем запись…' : 'Записаться и перейти в WhatsApp'}</button>
-          <p className="request-note">* Обязательные поля. Сначала сохраним запись и закрепим время, затем откроем WhatsApp. Отправьте сообщение мастеру самостоятельно.</p>
+          <p className="request-note">* Обязательные поля. Сохраним дату и время записи, затем откроем WhatsApp с данными автомобиля. Отправьте сообщение мастеру — ваш номер будет виден в чате.</p>
         </form>}
       </div>
     </section>

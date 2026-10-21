@@ -65,11 +65,10 @@ export const onRequest: PagesFunction<Env> = async ({ request, env }) => {
     const id = crypto.randomUUID()
     // The unique (date, time) constraint makes this atomic, including concurrent requests.
     const result = await env.BOOKINGS_DB.prepare(`
-      INSERT INTO bookings (id, date, time, name, phone, vehicle, year, vin, description, created_at)
-      VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      INSERT INTO bookings (id, date, time, name, phone, vehicle, created_at)
+      VALUES (?, ?, ?, '', '', '', ?)
       ON CONFLICT (date, time) DO NOTHING
-    `).bind(id, booking.date, booking.time, booking.name, booking.phone, booking.vehicle,
-      booking.year, booking.vin, booking.description, new Date().toISOString()).run()
+    `).bind(id, booking.date, booking.time, new Date().toISOString()).run()
     if (result.meta.changes === 0) return json(409, { error: 'Это время уже заняли. Выберите другое окно.' })
     return json(201, { id })
   } catch {

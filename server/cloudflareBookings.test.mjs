@@ -23,7 +23,7 @@ test('Cloudflare API uses the SQL constraint and never exposes customer details'
     method: 'POST', headers: { 'Content-Type': 'application/json', ...headers }, body: JSON.stringify(data),
   }))
   const dates = availableBookingDates()
-  const booking = { date: dates[0], time: '09:00', name: 'Test', phone: '+77070000000', vehicle: 'Test car', year: '', vin: '', description: '' }
+  const booking = { date: dates[0], time: '09:00' }
   try {
     assert.deepEqual(await (await call(new Request(`${url}?date=${dates[0]}`))).json(), { occupied: [] })
     assert.equal((await call(new Request(url), {})).status, 503)
@@ -33,9 +33,8 @@ test('Cloudflare API uses the SQL constraint and never exposes customer details'
     assert.equal((await post({ ...booking, date: almatyToday() })).status, 400)
     assert.equal((await post({ ...booking, date: '2099-01-01' })).status, 400)
     assert.equal((await post({ ...booking, time: '13:00' })).status, 400)
-    assert.equal((await post({ ...booking, name: '   ' })).status, 400)
-    assert.equal((await post({ ...booking, phone: 'abc' })).status, 400)
-    assert.equal((await post({ ...booking, year: '1800' })).status, 400)
+    assert.equal((await post({ date: booking.date })).status, 400)
+    assert.equal((await post({ time: booking.time })).status, 400)
     const responses = await Promise.all(Array.from({ length: 8 }, () => post(booking)))
     assert.equal(responses.filter(result => result.status === 201).length, 1)
     assert.equal(responses.filter(result => result.status === 409).length, 7)
@@ -44,9 +43,12 @@ test('Cloudflare API uses the SQL constraint and never exposes customer details'
     assert.equal(success.headers.get('Cache-Control'), 'no-store')
     const slots = await (await call(new Request(`${url}?date=${dates[0]}`))).json()
     assert.deepEqual(slots, { occupied: ['09:00'] })
-    assert.equal(JSON.stringify(slots).includes(booking.phone), false)
+    assert.equal(JSON.stringify(slots).includes('phone'), false)
     assert.equal(sqlite.prepare('SELECT COUNT(*) AS count FROM bookings').get().count, 1)
-    assert.equal((await post({ ...booking, time: '10:00', description: "'); DROP TABLE bookings; --" })).status, 201)
+    assert.equal((await post({ ...booking, time: '10:00', name: 'Do not store', phone: '+70000000000', vehicle: 'PRIVATE', vin: 'PRIVATE', description: "'); DROP TABLE bookings; --" })).status, 201)
+    for (const row of sqlite.prepare('SELECT name,phone,vehicle,year,vin,description FROM bookings').all()) {
+      for (const value of Object.values(row)) assert.equal(value, '')
+    }
     assert.equal((await post({ ...booking, date: dates.at(-1) })).status, 201)
     const tooLate = new Date(`${dates.at(-1)}T12:00:00Z`)
     tooLate.setUTCDate(tooLate.getUTCDate() + 1)

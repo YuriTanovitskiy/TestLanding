@@ -47,6 +47,7 @@ export const english: Record<string, string> = {
   'Основные услуги': 'Main services',
   'Цена': 'Price',
   'Диагностические работы': 'Diagnostics',
+  'Диагностические работы (Стартер/Генератор/АКБ)': 'Diagnostics (Starter/Alternator/Battery)',
   'Компьютерная диагностика любых авто': 'Computer diagnostics for all vehicles',
   'Мягкая абразивная чистка деталей (аквабласт)': 'Gentle abrasive parts cleaning (vapor blasting)',
   'от 2 500 ₸': 'from 2,500 ₸',

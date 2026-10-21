@@ -3,8 +3,9 @@ export const bookingTimes = ['09:00', '10:00', '11:00', '12:00'] as const
 export interface BookingRequest {
   date: string
   time: string
-  name: string
-  phone: string
+}
+
+export interface BookingDetails extends BookingRequest {
   vehicle: string
   year: string
   vin: string
