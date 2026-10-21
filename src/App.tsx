@@ -2,6 +2,7 @@ import './App.css'
 import { useLanguage, translateContent } from './i18n'
 import { LanguageSwitcher } from './components/LanguageSwitcher'
 import { RepairRequest } from './components/RepairRequest'
+import { ServiceBooking } from './components/ServiceBooking'
 import { ContactIcon } from './components/ContactIcon'
 import { LocationMap } from './components/LocationMap'
 import { RepairVideo } from './components/RepairVideo'
@@ -80,6 +81,8 @@ function Hero() {
             </table>
             <p className="service-price-note">{t("Итоговая стоимость ремонта определяется после диагностики.")}</p>
           </div>
+          <a className="button button-primary hero-booking-button" href="#service-booking">Записаться на сервис <span aria-hidden="true">↗</span></a>
+          <p className="hero-booking-note">При записи онлайн — диагностика агрегатов бесплатно!</p>
           <div className="action-row hero-contact-actions">
             <a className="button button-secondary" href={phones[0].href}><ContactIcon kind="phone" />{t("Позвонить")}</a>
             <a className="button button-primary" href={phones[0].whatsappUrl}><ContactIcon kind="whatsapp" />WhatsApp</a>
@@ -264,6 +267,7 @@ function App() {
         <Hero />
 
 
+        <ServiceBooking />
         <RepairRequest />
         <ContactProcess />
         <RepairCases />
