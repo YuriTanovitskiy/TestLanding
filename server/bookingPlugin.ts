@@ -2,8 +2,9 @@ import type { Plugin, Connect } from 'vite'
 import { mkdir, readFile, writeFile, rename } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { randomUUID } from 'node:crypto'
-import { bookingTimes, validBookingDate } from '../src/booking.ts'
+import { validBookingDate } from '../src/booking.ts'
 import type { BookingRequest } from '../src/booking.ts'
+import { parseBooking } from './bookingValidation.ts'
 
 interface SavedBooking extends BookingRequest { id: string; createdAt: string }
 
@@ -43,17 +44,9 @@ export function bookingPlugin(): Plugin {
     req.on('end', () => {
       let data: BookingRequest
       try {
-        const input: unknown = JSON.parse(body)
-        if (!input || typeof input !== 'object') throw new Error()
-        const source = input as Record<string, unknown>
-        const fields = ['date', 'time', 'name', 'phone', 'vehicle', 'year', 'vin', 'description'] as const
-        if (!fields.every(field => typeof source[field] === 'string')) throw new Error()
-        data = Object.fromEntries(fields.map(field => [field, (source[field] as string).trim()])) as unknown as BookingRequest
-        if (!validBookingDate(data.date) || !bookingTimes.some(time => time === data.time) ||
-          !data.name || data.name.length > 100 || !data.vehicle || data.vehicle.length > 120 ||
-          !/^[+\d\s()-]{10,25}$/.test(data.phone) || data.phone.replace(/\D/g, '').length < 10 ||
-          data.description.length > 2000 || data.vin.length > 40 ||
-          (data.year && (!/^\d{4}$/.test(data.year) || Number(data.year) < 1900 || Number(data.year) > new Date().getFullYear() + 1))) throw new Error()
+        const parsed = parseBooking(JSON.parse(body) as unknown)
+        if (!parsed) throw new Error()
+        data = parsed
       } catch { return reply(400, { error: 'Проверьте поля формы, дату и время записи.' }) }
       queue = queue.then(async () => {
         const items = await readBookings()

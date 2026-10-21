@@ -87,7 +87,7 @@ export function ServiceBooking() {
           <p className="section-description">Выберите удобный день и время. Онлайн-запись открыта на ближайшие 7 рабочих дней, начиная с завтрашнего дня. Воскресенье — выходной.</p>
           <div className="booking-offer"><span>Акция при записи онлайн</span><strong>Диагностика агрегатов бесплатно!</strong></div>
           <div className="booking-today"><h3>Нужен ремонт сегодня?</h3><p>Принимаем в порядке живой очереди. Уточните загрузку мастерской:</p><a href={phones[0].href}>Позвонить</a><a href={phones[0].whatsappUrl}>Написать в WhatsApp</a></div>
-          <p className="request-note booking-demo">Пробная запись: данные сохраняются на локальном сервере этого сайта.</p>
+          {import.meta.env.DEV && <p className="request-note booking-demo">Пробная запись: данные сохраняются на локальном сервере этого сайта.</p>}
         </div>
         {confirmation ? <div className="request-form booking-success" role="status">
           <p className="eyebrow">Время закреплено за вами</p><h3>Запись сохранена</h3>

@@ -1,0 +1,15 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  // Local testing only. Production binding is configured in the Pages dashboard.
+  "name": "autocraft-bookings-local",
+  "pages_build_output_dir": "./dist",
+  "compatibility_date": "2026-10-21",
+  "d1_databases": [
+    {
+      "binding": "BOOKINGS_DB",
+      "database_name": "autocraft-bookings",
+      "database_id": "00000000-0000-0000-0000-000000000000",
+      "migrations_dir": "./migrations"
+    }
+  ]
+}
