@@ -1,6 +1,6 @@
 import type { MouseEvent } from 'react'
 
-type AnalyticsEvent = 'contact_whatsapp' | 'contact_phone' | 'contact_route' | 'repair_form_start' | 'repair_form_whatsapp'
+type AnalyticsEvent = 'contact_whatsapp' | 'contact_phone' | 'contact_route' | 'repair_form_start' | 'repair_form_whatsapp' | 'service_booking_complete'
 interface EventParameters { placement: string }
 interface AnalyticsWindow extends Window {
   dataLayer?: unknown[]
@@ -26,8 +26,26 @@ export function initializeAnalytics() {
   document.head.append(script)
 }
 
-export function trackEvent(name: AnalyticsEvent, parameters: EventParameters) {
-  analyticsWindow.gtag?.('event', name, { ...parameters, transport_type: 'beacon' })
+export function trackEvent(name: AnalyticsEvent, parameters: EventParameters, onComplete?: () => void) {
+  if (!onComplete) {
+    analyticsWindow.gtag?.('event', name, { ...parameters, transport_type: 'beacon' })
+    return
+  }
+  if (!analyticsWindow.gtag) { onComplete(); return }
+  let completed = false
+  const finish = () => {
+    if (completed) return
+    completed = true
+    window.clearTimeout(timer)
+    onComplete()
+  }
+  // Navigation must still work when analytics is blocked or has not loaded.
+  const timer = window.setTimeout(finish, 1500)
+  try {
+    analyticsWindow.gtag('event', name, {
+      ...parameters, transport_type: 'beacon', event_callback: finish, event_timeout: 1500,
+    })
+  } catch { finish() }
 }
 
 export function trackContactClick(event: MouseEvent<HTMLDivElement>) {
@@ -38,7 +56,7 @@ export function trackContactClick(event: MouseEvent<HTMLDivElement>) {
   const placement = link.closest('section')?.id ||
     (link.closest('.mobile-contact-bar') ? 'mobile-bar' : 'header')
   if (href.startsWith('tel:')) trackEvent('contact_phone', { placement })
-  else if (href.startsWith('https://wa.me/')) trackEvent('contact_whatsapp', { placement })
+  else if (href.startsWith('https://wa.me/') && !link.hasAttribute('data-booking-followup')) trackEvent('contact_whatsapp', { placement })
   else if (/^https:\/\/(www\.google\.com\/maps|yandex\.com\/maps|2gis\.kz\/)/.test(href)) {
     trackEvent('contact_route', { placement })
   }

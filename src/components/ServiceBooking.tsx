@@ -3,6 +3,7 @@ import type { FormEvent } from 'react'
 import { availableBookingDates, bookingTimes, nextBookingDate, validBookingDate } from '../booking'
 import type { BookingRequest } from '../booking'
 import { phones } from '../data/siteData'
+import { trackEvent } from '../analytics'
 
 interface Availability { date: string; occupied: string[]; loading: boolean; error: string }
 
@@ -72,7 +73,7 @@ export function ServiceBooking() {
       ].filter(Boolean).join('\n')
       const url = `${phones[0].whatsappUrl}?text=${encodeURIComponent(message)}`
       setConfirmation({ url, date, time })
-      window.location.assign(url)
+      trackEvent('service_booking_complete', { placement: 'service-booking' }, () => window.location.assign(url))
     } catch (failure) {
       setError(failure instanceof Error ? failure.message : 'Не удалось сохранить запись. Попробуйте ещё раз.')
     } finally { setBusy(false) }
@@ -93,7 +94,7 @@ export function ServiceBooking() {
           <p className="eyebrow">Время закреплено за вами</p><h3>Запись сохранена</h3>
           <p>{confirmation.date.split('-').reverse().join('.')} в {confirmation.time}</p>
           <p>Отправьте готовое сообщение в WhatsApp, чтобы мастер получил данные вашей записи. Нажмите «Отправить» в чате.</p>
-          <a className="button button-primary" href={confirmation.url}>Отправить запись в WhatsApp</a>
+          <a className="button button-primary" href={confirmation.url} data-booking-followup>Отправить запись в WhatsApp</a>
           <p className="request-note">Если WhatsApp не открылся автоматически, нажмите кнопку выше.</p>
         </div> : <form className="request-form booking-form" onSubmit={submit}>
           <fieldset disabled={busy}><legend>1. Дата и время</legend>
