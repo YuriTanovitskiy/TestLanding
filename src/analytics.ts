@@ -1,4 +1,5 @@
 import type { MouseEvent } from 'react'
+import { isOwnerMode } from './ownerMode'
 
 type AnalyticsEvent = 'contact_whatsapp' | 'contact_phone' | 'contact_route' | 'repair_form_start' | 'repair_form_whatsapp' | 'service_booking_complete'
 interface EventParameters { placement: string }
@@ -11,6 +12,7 @@ const analyticsWindow = window as AnalyticsWindow
 const measurementId = import.meta.env.VITE_GA_MEASUREMENT_ID as string | undefined
 
 export function initializeAnalytics() {
+  if (isOwnerMode()) return
   if (!measurementId || !/^G-[A-Z0-9]+$/.test(measurementId) || analyticsWindow.gtag) return
   analyticsWindow.dataLayer = analyticsWindow.dataLayer || []
   analyticsWindow.gtag = function () {
@@ -27,6 +29,7 @@ export function initializeAnalytics() {
 }
 
 export function trackEvent(name: AnalyticsEvent, parameters: EventParameters, onComplete?: () => void) {
+  if (isOwnerMode()) { onComplete?.(); return }
   if (!onComplete) {
     analyticsWindow.gtag?.('event', name, { ...parameters, transport_type: 'beacon' })
     return

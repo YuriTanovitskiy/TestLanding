@@ -9,6 +9,7 @@ import { RepairVideo } from './components/RepairVideo'
 import { CaseGallery } from './components/CaseGallery'
 import { SeasonOffer } from './components/SeasonOffer'
 import { trackContactClick } from './analytics'
+import { OwnerModeNotice } from './components/OwnerModeNotice'
 import {
   contactDetails as rawcontactDetails,
   workshopIntro as rawworkshopIntro,
@@ -262,6 +263,7 @@ function App() {
   const { t } = useLanguage()
   return (
     <div onClick={trackContactClick}>
+      <OwnerModeNotice />
       <Header />
       <main>
         <Hero />

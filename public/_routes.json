@@ -1,5 +1,5 @@
 {
   "version": 1,
-  "include": ["/api/bookings"],
-  "exclude": []
+  "include": ["/*"],
+  "exclude": ["/assets/*", "/images/*", "/videos/*", "/logo.png", "/icons.svg", "/favicon.svg"]
 }

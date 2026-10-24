@@ -4,7 +4,9 @@ import './index.css'
 import App from './App.tsx'
 import { LanguageProvider } from './LanguageProvider'
 import { initializeAnalytics } from './analytics'
+import { initializeOwnerMode } from './ownerMode'
 
+initializeOwnerMode()
 initializeAnalytics()
 
 createRoot(document.getElementById('root')!).render(
